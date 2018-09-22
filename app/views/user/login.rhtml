@@ -1,0 +1,33 @@
+<div class="left">
+	<h2><%= image_tag 'tasty_logo.gif', {:alt => 'tasty.map.', :size => "150x90"} %></h2>
+</div>
+
+<div id="signin">
+	<div class="left">
+		<h3>tasty.map.へログイン</h3>
+		<% form_tag({:action => 'login'}, { :id => 'signin_form'} ) do %>
+		<div class="field">
+			<label for="user_login"><%= l :field_login %></label>
+			<%= text_field 'user', 'login'  %>
+		</div>
+		<div class="field">
+			<label for="user_password">パスワード</label>
+			<%= password_field 'user', 'password'  %>
+		</div>
+		<div class="field">
+			<%= check_box 'user', 'rememberme' %><label for="user_rememberme" class="rememberme"><%= l :field_remember_me %></label>
+		</div>
+		<div class="submit">
+			<%# button_to_function 'アカウントを新規作成', "alert($('#signin_form'));" %>
+			<%= submit_tag 'ログイン' %>
+		</div>
+		<% end %>
+	</div>
+</div>
+<div class="left" style="margin-top:40px">
+	<ul>
+		<li><%= link_to 'アカウントを新規作成する。', :action => 'signup' %></li>
+		<li><%= link_to 'パスワードを忘れた？？', :action => 'forgot_password' %></li>
+	</ul>
+</div>
+<div class="clear"></div>

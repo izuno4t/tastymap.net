@@ -1,0 +1,14 @@
+<%- @page_title = "ダッシュボード" -%>
+<div id="main" class="dashbord">
+	<div id="list" style="width:300px; float:right; margin:0 10px">
+	<h3 style="font-size:1em; background:#ccc; padding:5px; margin:10px 0; color:#fff">最近登録したお店</h3>
+	<ul style="margin: 0 10px 10px;border-bottom:1px dotted #ccc;">
+	<%- for store in @stores -%>
+	<li><%= link_to h(store.name), :controller => 'stores', :action => 'show', :id => store %></li>
+	<%- end -%>
+	</ul>
+	<div class="actions" style="text-align:right">
+	<%= link_to image_tag("add.gif", :size => "16x16", :alt => "お店を追加する", :class=>"action") + 'お店を追加する', :controller => 'stores', :action => 'new' %>
+	</div>
+	</div>
+</div>

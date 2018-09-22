@@ -1,0 +1,18 @@
+<div class="left">
+	<h2><%= image_tag 'tasty_logo.gif', {:alt => 'tasty.map.', :size => "150x90"} %></h2>
+</div>
+
+<div id="signup">
+	<h3>メールアドレス・パスワードを登録してください。</h3>
+	<%= error_messages_for 'user' %>
+
+	<% form_tag :action => 'signup' do %>
+	<%= render_partial 'edit', :user => @user, :submit => false %>
+	<%= render_partial 'password', :submit => false %>
+	
+	<div class="submit">
+		<%= submit_tag 'アカウント作成' %>
+	</div>
+	<% end %>
+</div>
+<div class="clear"></div>

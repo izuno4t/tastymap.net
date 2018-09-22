@@ -1,0 +1,13 @@
+<div class="field">
+	<label for="user_email">メールアドレス</label><br />
+	<%= text_field 'user', 'email'  %>
+</div>
+<div class="field">
+	<label for="user_login">ログイン名</label><br />
+	<%= text_field 'user', 'login'  %>
+</div>
+<% if @submit %>
+<div class="submit">
+	<%= submit_tag (user.new_record? ? 'サインアップ' : 'プロファイルを更新') %>
+</div>
+<%- end -%>

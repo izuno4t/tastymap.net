@@ -1,0 +1,12 @@
+<% @page_title = "お店を追加する" -%>
+
+<div id="main">
+	<% form_tag({:action => 'create'}, :multipart => true) do %>
+		<h2>お店を追加する</h2>
+		<%= render :partial => 'form' %>
+		<div class="submit">
+		<%= submit_tag "お店を追加" %>
+		</div>
+	<% end %>
+</div>
+

@@ -1,0 +1,21 @@
+_gloc_rule_default: '|n| n==1 ? "" : "_plural" '
+
+activerecord_error_inclusion: がリストに含まれていません
+activerecord_error_exclusion: が予約されています
+activerecord_error_invalid: が無効です
+activerecord_error_confirmation: 確認のパスワードと合っていません
+activerecord_error_accepted: を承諾してください
+activerecord_error_empty: が空です
+activerecord_error_blank: が空白です
+activerecord_error_too_long: が長すぎます
+activerecord_error_too_short: が短かすぎます
+activerecord_error_wrong_length: の長さが間違っています
+activerecord_error_taken: はすでに登録されています
+activerecord_error_not_a_number: が数字ではありません
+activerecord_error_not_a_date: の日付が間違っています
+activerecord_error_greater_than_start_date: を開始日より後にしてください
+activerecord_error_not_same_project: 同じプロジェクトに属していません
+activerecord_error_circular_dependency: この関係では、循環依存になります
+
+field_login: ログイン
+field_remember_me: コンピュータに設定を保存

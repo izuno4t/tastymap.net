@@ -1,0 +1,81 @@
+<%-
+def every(arr)
+        idx=0
+        while idx < arr.size
+                yield(arr[idx],arr[idx+1],arr[idx+2])
+                idx += 3
+        end
+end
+-%>
+<% @page_title = "お店の一覧" -%>
+<div id="stores">
+
+<form id="store_search" method="get" name="store_search">
+	<%= image_tag("search.gif", :size => "24xs4", :alt => "検索") %>
+	<input type="text" name="q" id="query_text" /><input type="submit" id="store_search_submit" value="検索" />
+</form>
+
+<%- if not @stores.empty? -%>
+<table>
+	<%- every(@stores){|i,j,k| -%>
+	<tr>
+	<%- for store in [i,j,k] -%>
+	<td valign="top">
+	<%- if store-%>
+		<h2><%= link_to h(store.name), :action => 'show', :id => store, :from => url_for(params) %></h2>
+		<div style="width:240px; height:180px; text-align:center">
+		<%- unless store.photos.empty?
+			extention = File.extname(store.photos.last.filename)
+			filename = File.basename(store.photos.last.filename, extention)		
+		-%>
+		<%= link_to image_tag("/photos/#{store.id}/#{filename.downcase}_m#{extention}"), {:action => 'show', :id => store, :from => url_for(params)}, {:title => store.name + "を詳しく！！"}%>
+		<%- else -%>
+		<%= link_to image_tag("dummy.gif", {:size => '240x180', :alt => '画像が未登録なので誰か載せて'}), {:action => 'show', :id => store, :from => url_for(params)}, {:title => store.name + "を詳しく！！"} %>
+		<%- end -%>
+		</div>
+		<div class="info">
+			<ul>
+				<li>タグ:<%= h store.tag_list %></li>
+				<li>カテゴリ:<%= h store.category %></li>
+				<%= content_tag("li", h(store.address)) unless store.address.nil? or store.address.empty?  %>
+				<%= content_tag("li", h(store.tel)) unless store.tel.nil? or store.tel.empty? %>
+			</ul>
+		</div>
+		<div class="actions">
+			<ul>
+				<%- unless store.url.nil? or store.url.empty? -%>
+				<li class="home"><a href="<%=URI.encode h store.url %>" title="<%= h store.name %>" rel="external"><%= image_tag("home.gif", :size => "16x16", :alt => h(store.name), :title => h(store.name) ) %></a></li>
+				<%- end -%>
+				<li>
+				<%- if 'list' == params[:action] -%>
+				<%= link_to_if store.favorites.find(:all, :conditions => ["user_id = :user_id", {:user_id => session[:user].id}]).empty?, image_tag("favourite.gif", :size => "16x16", :alt => "お気に入りに追加"), :controller => 'favorites', :action => 'add', :id => store, :from => url_for(params) %>
+				<%- else -%>
+				<%= link_to_unless store.favorites.find(:all, :conditions => ["user_id = :user_id", {:user_id => session[:user].id}]).empty?, image_tag("brokenheart.gif", :size => "16x16", :alt => "お気に入りから削除"), :controller => 'favorites', :action => 'remove', :id => store, :from => url_for(params) %>
+				<%- end -%>
+				</li>
+				
+				<li><%= link_to image_tag("add_photo.gif", :size => "16x16", :alt => "写真を追加"), :controller => 'photos', :action => 'add', :id => store, :from => url_for(params) %></li>
+				<%- if not store.user.nil? and store.user.id == session[:user].id -%>
+				<li><%= link_to image_tag("edit.gif", :size => "16x16", :alt => "編集"), :action => 'edit', :id => store, :from => url_for(params) %></li>
+				<%- end -%>
+			</ul>
+		</div>
+	<%- end -%>
+	</td>
+	<%- end -%>
+	</tr>
+	<%- } -%>
+</table>
+<div class="clear"></div>
+<%- end -%>
+<div class="pagenation">
+<p>
+<%= link_to "&laquo;", {:page => @store_pages.first}, {:title => '先頭へ'} unless @store_pages.current.first? %>
+<%= link_to "&lsaquo;", {:page => @store_pages.current.previous}, {:title => '前へ'} if @store_pages.current.previous %>
+<%= pagination_links(@store_pages, :window_size=>2) %>
+<%= link_to "&rsaquo;", {:page => @store_pages.current.next}, {:title => '次へ'} if @store_pages.current.next %>
+<%= link_to "&raquo;", {:page => @store_pages.last}, {:title => '最後へ'} unless @store_pages.current.last? %>
+</p>
+<p style="font-size:0.8em; padding: 5px 0">(<%= @store_pages.item_count %>件あります。)</p>
+</div>
+</div>

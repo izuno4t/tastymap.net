@@ -1,0 +1,62 @@
+<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=<%=googleapikey%>" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+//<![CDATA[
+var geocoder = new GClientGeocoder();
+
+function addr2latlng() {
+	geocoder.getLatLng( $("#store_address").val(), setLatLng );
+}
+
+function setLatLng (latlng) {
+	if (!latlng) {
+		alert("ご指定の住所（" + $("#store_address").val() + "）はジオコーディングできませんでした。");
+	}
+	else 
+	{
+		$("#store_lat").val(latlng.lat());
+		$("#store_lng").val(latlng.lng());
+	}
+}
+//]]>
+</script>
+
+<% unless @store.errors.empty? %>
+<div id="errors"><%= error_messages_for 'store' %></div>
+<% end %>
+
+<!--[form:store]-->
+<div class="field required"><label for="store_name">店名</label><br />
+<%= text_field 'store', 'name' %></div>
+
+<div class="field"><label for="store_category">タグ</label><br />
+<%= text_field 'store', 'tag_list' %></div>
+
+<div class="field"><label for="store_category">カテゴリ</label><br />
+<%= text_field 'store', 'category' %></div>
+
+<div class="field"><label for="store_category">営業時間</label><br />
+<%= text_field 'store', 'open' %></div>
+
+<div class="field"><label for="store_category">定休日</label><br />
+<%= text_field 'store', 'close' %></div>
+
+<div class="field"><label for="store_address">住所</label><br />
+<%= text_field 'store', 'address', {:style => 'width:400px'} %><input type="button" name="latlng" value="緯度・経度に変換" onclick="addr2latlng();return false;" /></div>
+
+<div class="field required"><label for="store_lat">緯度・経度</label><br />
+<%= text_field 'store', 'lat', :class=>"lat" %><%= text_field 'store', 'lng', :class=>"lng" %></div>
+
+<div class="field"><label for="store_tel">電話番号</label><br />
+<%= text_field 'store', 'tel' %></div>
+
+<div class="field"><label for="store_url">URL</label><br />
+<%= text_field 'store', 'url' %></div>
+
+<div class="field"><label for="store_review">レビューURL</label><br />
+<%= text_field 'store', 'review' %></div>
+
+<div class="field"><label for="store_note">備考</label><br />
+<%= text_area 'store', 'note', :size=>"30x5" %></div>
+<!--[eoform:store]-->
+
+<%#= file_field 'photo', 'photo' %>

@@ -1,0 +1,90 @@
+<% @page_title = h(@store.category) + " " + h(@store.name) -%>
+<div id="main">
+<div>
+<div class="back left">
+<%= link_to image_tag("up.gif", :size => "16x16", :alt => "もどる") + "もどる", n(url_for(n(params[:from])), {:action => 'list'}) %>
+</div>
+
+<div class="actions right">
+	<ul>
+		<li><%= link_to image_tag("favourite.gif", :size => "16x16", :alt => "お気に入りに追加"), :controller => 'favorites', :action => 'add', :id => @store, :from => url_for(params) %></li>
+		<li><%= link_to image_tag("add_photo.gif", :size => "16x16", :alt => "写真を追加"), :controller => 'photos', :action => 'add', :id => @store %></li>
+		<%- if not @store.user.blank? and @store.user.id == session[:user].id -%>
+		<li><%= link_to image_tag("edit.gif", :size => "16x16", :alt => "編集"), :action => 'edit', :id => @store %></li>
+		<%- end -%>
+	</ul>
+</div>
+</div>
+<div id="map" style="clear:left"></div>
+<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=<%=googleapikey%>" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+//<![CDATA[
+window.onload = function() {
+	var map = new GMap2(document.getElementById("map"));
+	map.addControl(new GLargeMapControl());
+	map.setCenter(new GLatLng(<%= @store.lat %>, <%= @store.lng %>), 17);
+	
+	var marker = new GMarker(new GLatLng(<%= @store.lat %>, <%= @store.lng %>));
+	map.addOverlay(marker);
+	description = '<%= render(:partial => "blow").gsub(/\r\n|\r|\n/, "") %>';
+	marker.openInfoWindowHtml(description);
+	
+	GEvent.addListener(marker, "click", function() {
+		marker.openInfoWindowHtml(description);
+	});
+}
+//]]>
+</script>
+
+<div class="right">
+<%- unless @store.photos.empty?-%>
+<%= javascript_include_tag "mootools.js", "jd.gallery.js" %>
+<script type="text/javascript">
+//<![CDATA[
+function startGallery() {
+	var myGallery = new gallery($('myGallery'), {
+		timed: true,
+		showArrows: true,
+		delay: 7000,
+		showCarousel: true,
+		showInfopane: false,
+		fadeDuration: 10,
+		embedLinks: false
+	});
+}
+window.onDomReady(startGallery);
+//]]>
+</script>
+<div id="myGallery">
+<%- for photo in @store.photos.reverse!
+		extention = File.extname(photo.filename)
+		filename = File.basename(photo.filename, extention)
+ -%>
+	<div class="imageElement">
+		<h3><%= n(photo.title) %></h3>
+		<p><%= n(photo.description, '&nbsp;') %></p>
+		<%= image_tag "/photos/#{@store.id}/#{photo.filename}", :class => 'full'%>
+		<%= image_tag "/photos/#{@store.id}/#{filename}_s#{extention}", :class => 'thumbnail'%>
+	</div>
+<%- end -%>
+</div>
+<%- end -%>
+
+	<div id="tagged">
+		<h3>タグ</h3>
+		<p><%= @store.tag_list %></p>
+	</div>
+	<div id="favorit">
+		<h3>お気に入り(<%= @store.favorites.size %>)</h3>
+		<p>
+			<%- for favorite in @store.favorites -%>
+			<%= image_tag buddyicon(favorite.user), :alt => n(favorite.user.screenname,n(favorite.user.login)), :title => n(favorite.user.screenname,n(favorite.user.login)) %>
+			<%- end -%>
+		</p>
+	</div>
+	<div id="recomend">
+		<h3>コメント</h3>
+		<p><%= n hbr(@store.note), '&nbsp;' %></p>
+	</div>
+</div>
+</div>
