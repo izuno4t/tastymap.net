@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<% if @page_title -%>
+<title><%= @page_title %> - tasty.map.</title>
+<% else -%>
+<title>tasty.map. | 内輪でつくるレストランガイド</title>
+<% end -%>
+<link rel="shortcut icon" href="<%= url_for('/favicon.ico') %>" />
+<%= javascript_include_tag "jquery-1.4.2.min" %>
+<%= stylesheet_link_tag 'style', 'scaffold', 'jd.gallery.css' %>
+<%= googleanalystics "UA-74284-7"-%>
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	$('a[@rel~=external]').click(function(){
+		window.open($(this).attr("href"));
+		return false;
+	});
+});
+//]]>
+</script>
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		<div id="logo" >
+			<h1><%= link_to "<span>&nbsp;</span>tasty.map.", :controller => 'welcome'%></h1>
+		</div>
+		<div id="usermenu">
+			<ul>
+				<% if logged_in? -%>
+				<li><%= link_to n(current_user.screenname,current_user.login), :controller => 'users', :action => 'profile' %>でログイン中</li>
+				<li><%= link_to 'ログアウト', :controller => 'logout' %></li>
+				<% else %>
+				<li><%= link_to 'ログイン', :controller => 'login' %></li>
+				<li><%= link_to 'サインアップ', :controller => 'signup' %></li>
+				<% end -%>
+			</ul>
+		</div>
+		<div class="clear"></div>
+		<div id="tabs">
+			<ul>
+				<%- if logged_in? -%>
+				<li><%= current_page?(:controller => 'stores', :action => 'new')? link_to("お店を追加", {:controller => 'stores', :action => 'new'},{:class => 'current'}):link_to("お店を追加", {:controller => 'stores', :action => 'new'})  %></li>
+				<li><%= current_page?(:controller => 'users', :action => 'settings')? link_to("設定", {:controller => 'users', :action => 'settings'},{:class => 'current'}):link_to("設定", {:controller => 'users', :action => 'settings'})  %></li>
+				<% end -%>
+				<%- if logged_in? -%>
+				<li><%= current_page?(:controller => 'photos', :action => 'list')? link_to("写真", {:controller => 'photos', :action=>'index'}, {:class => 'current'}):link_to("写真", {:controller => 'photos', :action=>'index'})%></li>
+				<li><%= current_page?(:controller => 'stores')? link_to("お店", {:controller => 'stores', :action=>'index'}, {:class => 'current'}):link_to("お店", {:controller => 'stores', :action=>'index'})%></li>
+				<li><%= current_page?(:controller => 'stores', :action => 'yours')? link_to("お気に入り", {:controller => 'stores', :action=>'yours'}, {:class => 'current'}):link_to("お気に入り", {:controller => 'stores', :action=>'yours'})%></li>
+				<!--li><%= current_page?(:controller => 'dashboard')? link_to("ダッシュボード", {:controller => 'dashboard'},{:class => 'current'}):link_to("ダッシュボード", {:controller => 'dashboard'}) %></li-->
+				<% else -%>
+				<li><%= current_page?(:controller => 'welcome')? link_to("ホーム", {:controller => 'welcome'}, {:class => 'current'}): link_to("ホーム", :controller => 'welcome')%></li>
+				<% end -%>
+				<li><%= current_page?(:controller => 'map')? link_to("マップ", {:controller => 'map'}, {:class => 'current'}):link_to("マップ", {:controller => 'map'})%></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div id="content">
+		<%- for name in [:error, :notice, :warning, :message] -%>
+		<%- if flash[name] -%>
+		<div id="<%= name %>"><%= flash[name] %></div>
+		<% end -%>
+		<% end -%>
+		<%= yield %>
+		<div class="clear"></div>
+	</div>
+
+	<div id="footer">
+		<ul>
+			<li>&copy;&nbsp;tasty.map.</li>
+			<li><%= link_to_unless_current "About Us", {:controller=>'aboutus'}, {:title=>"About Us"}%></li>
+			<li><%= link_to_unless_current "Contact", :controller=>'contact'%></li>
+			<li><%= link_to_unless_current "Help", :controller=>'help'%></li>
+			<li><%= link_to_unless_current "Terms of Use", :controller=>'termsofuse'%></li>
+			<li><%= link_to_unless_current "Privacy", :controller=>'privacy'%></li>
+			<!--li><%= link_to_unless_current "API", :controller=>'api'%></li-->
+			<li><%= link_to_unless_current "Feed Back", :controller =>'feedback'%></li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>

@@ -1,8 +1,7 @@
 class WelcomeController < ApplicationController
-	
-	skip_before_filter :login_required
-	  
+
 	def index
-		redirect_to :controller => 'dashboard' if user?
+		redirect_to :controller => 'dashboard' if logged_in?
 	end
+  
 end

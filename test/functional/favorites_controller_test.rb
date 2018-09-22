@@ -1,92 +1,45 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'favorites_controller'
+require 'test_helper'
 
-# Re-raise errors caught by the controller.
-class FavoritesController; def rescue_action(e) raise e end; end
-
-class FavoritesControllerTest < Test::Unit::TestCase
-  fixtures :favorites
-
-  def setup
-    @controller = FavoritesController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
-
-    @first_id = favorites(:first).id
-  end
-
-  def test_index
+class FavoritesControllerTest < ActionController::TestCase
+  test "should get index" do
     get :index
     assert_response :success
-    assert_template 'list'
-  end
-
-  def test_list
-    get :list
-
-    assert_response :success
-    assert_template 'list'
-
     assert_not_nil assigns(:favorites)
   end
 
-  def test_show
-    get :show, :id => @first_id
-
-    assert_response :success
-    assert_template 'show'
-
-    assert_not_nil assigns(:favorite)
-    assert assigns(:favorite).valid?
-  end
-
-  def test_new
+  test "should get new" do
     get :new
-
     assert_response :success
-    assert_template 'new'
-
-    assert_not_nil assigns(:favorite)
   end
 
-  def test_create
-    num_favorites = Favorite.count
+  test "should create favorite" do
+    assert_difference('Favorite.count') do
+      post :create, :favorite => { }
+    end
 
-    post :create, :favorite => {}
-
-    assert_response :redirect
-    assert_redirected_to :action => 'list'
-
-    assert_equal num_favorites + 1, Favorite.count
+    assert_redirected_to favorite_path(assigns(:favorite))
   end
 
-  def test_edit
-    get :edit, :id => @first_id
-
+  test "should show favorite" do
+    get :show, :id => favorites(:one).to_param
     assert_response :success
-    assert_template 'edit'
-
-    assert_not_nil assigns(:favorite)
-    assert assigns(:favorite).valid?
   end
 
-  def test_update
-    post :update, :id => @first_id
-    assert_response :redirect
-    assert_redirected_to :action => 'show', :id => @first_id
+  test "should get edit" do
+    get :edit, :id => favorites(:one).to_param
+    assert_response :success
   end
 
-  def test_destroy
-    assert_nothing_raised {
-      Favorite.find(@first_id)
-    }
+  test "should update favorite" do
+    put :update, :id => favorites(:one).to_param, :favorite => { }
+    assert_redirected_to favorite_path(assigns(:favorite))
+  end
 
-    post :destroy, :id => @first_id
-    assert_response :redirect
-    assert_redirected_to :action => 'list'
+  test "should destroy favorite" do
+    assert_difference('Favorite.count', -1) do
+      delete :destroy, :id => favorites(:one).to_param
+    end
 
-    assert_raise(ActiveRecord::RecordNotFound) {
-      Favorite.find(@first_id)
-    }
+    assert_redirected_to favorites_path
   end
 end

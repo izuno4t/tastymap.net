@@ -1,18 +1,8 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'map_controller'
+require 'test_helper'
 
-# Re-raise errors caught by the controller.
-class MapController; def rescue_action(e) raise e end; end
-
-class MapControllerTest < Test::Unit::TestCase
-  def setup
-    @controller = MapController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
-  end
-
+class MapControllerTest < ActionController::TestCase
   # Replace this with your real tests.
-  def test_truth
+  test "the truth" do
     assert true
   end
 end

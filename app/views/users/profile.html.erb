@@ -1,0 +1,44 @@
+<div id="main">
+	<%= error_messages_for 'user' %>
+	<% form_tag( {:action => 'update'}, :multipart => true, :method => :put) do %>
+	<h2>プロファイル</h2>
+	<div class="field">
+		<% icon = (current_user.buddyicon.nil?)? "buddy_icon_size.gif" : "/buddyicons/#{current_user.buddyicon}"%>
+		<%=  image_tag "#{icon}", :size => '48x48', :alt => "buddy icon", :style => 'float:left; padding:5px'%>
+		<%= file_field 'user', 'buddyicon', :style =>"float:left; margin-top:20px;margin-left:47px" %>
+		<div class="clear"></div>
+	</div>
+	<div class="field">
+		<label for="user_login">スクリーンネーム</label><br />
+		<%= text_field 'user', 'screenname'  %>
+	</div>
+	<div class="field">
+		<label for="user_email">メールアドレス</label><br />
+		<%= text_field 'user', 'email'  %>
+	</div>
+	<div class="field">
+		<label for="user_firstname">名前(姓)</label><br />
+		<%= text_field 'user', 'firstname'  %>
+	</div>
+	<div class="field">
+		<label for="user_lastname">名前(名)</label><br />
+		<%= text_field 'user', 'lastname'  %>
+	</div>
+	<div class="field">
+		<label for="user_description">備考</label><br />
+		<%= text_area 'user', 'description', :size=>"30x5" %>
+	</div>
+
+	<div class="submit">
+		<%= submit_tag 'プロファイルを更新' %>
+	</div>
+	<% end %>
+
+	<%- form_tag( {:action => 'delete'}, :id => 'delete') do  -%>
+		アカウントを削除する場合はこちらから。
+		<div class="submit">
+		<%= hidden_field 'user', 'form', :value => 'delete' %>
+		<%= submit_tag 'アカウントを削除' %>
+		</div>
+	<%- end -%>
+</div>

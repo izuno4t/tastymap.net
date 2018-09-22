@@ -1,0 +1,26 @@
+<% @page_title = "#{@photo.title}を編集" -%>
+
+<div class="back">
+<%= link_to image_tag("up.gif", :size => "16x16", :alt => "戻る") + "もどる", :action => 'index' %>
+</div>
+
+<div id="main">
+	<% form_tag :action => 'update', :id => @photo do %>
+	<h2><%= @photo.title + "を編集" %></h2>
+	<%= error_messages_for 'photo' %>
+	<div class="field">
+		この写真は「<%= link_to @photo.store.name, :controller => 'stores', :action => 'show', :id => @photo.store %>」に登録されています。
+	</div>
+	<div class="field">
+		<label for="photo_title">タイトル</label><br/>
+		<%= text_field 'photo', 'title' %>
+	</div>
+
+	<div class="field">
+		<label for="photo_description">ノート</label><br/>
+		<%= text_area 'photo', 'description',:size=>"30x5" %>
+	</div>
+
+	<div class="submit"><%= submit_tag "#{@photo.title}を更新" %></div>
+	<% end %>
+</div>

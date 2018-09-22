@@ -46,7 +46,7 @@ function load() {
 			map.addOverlay( mkr );
 		
 			// html 作成
-			var html = '<h2><a href="/stores/show/' + id + '?from=/stores/list">' + name + '</a></h2><p>カテゴリ:' + cat + '</p>';
+			var html = '<h2><a href="/stores/' + id + '?from=/stores">' + name + '</a></h2><p>カテゴリ:' + cat + '</p>';
 			if( url.length != 0 ){
 				html += "<br /><a href="+url+" target=&uml;_blank&uml;>Webサイト</a>";
 			}
@@ -62,7 +62,7 @@ function load() {
 	 
 	        // xml http request
 	        var request = GXmlHttp.create();
-	        request.open( "GET", "/map/xml", true );
+	        request.open( "GET", "/stores.xml", true );
 	        // call back
 	        request.onreadystatechange = function() {
 			    if( 4 == request.readyState ){
